@@ -196,11 +196,6 @@ class FixedBaseRobotEnv(gym.Env):
             "max_length_reached": self.findings_log_list.count("max_length_reached") / total_count,
         }
 
-    def rare_eval_findings_variable(self):
-        # Only eval the findings variable every 5000 episodes to save comp. resources
-        if self.episodes_since_instantiation % 5000 == 0:
-            self.eval_findings_variable(self)
-
 
     def reset(self, seed=None):
         # self.log_message("New episode started.")
@@ -520,21 +515,30 @@ class FixedBaseRobotEnv(gym.Env):
             info = {"state": "ongoing"}
 
         elif stepResult ==  "crashedIntoGround": # Crash into ground
-            # self.log_message("crashedIntoGround")
+            self.log_message("crashedIntoGround")
+            current_time = datetime.datetime.now()
+            self.log_message(str(self.steps) +  "taken in total at timestamp: " + str(current_time))
+
             reward = CRASHED_GROUND_REWARD
             terminated = True
             info = {"state": "crashed_into_ground"}
             self.update_findings_list(info["state"])
         
         elif stepResult == "targetCrashed":  # Goal reached
-            # self.log_message("targetCrashed")
+            self.log_message("targetCrashed")
+            current_time = datetime.datetime.now()
+            self.log_message(str(self.steps) +  "taken in total at timestamp: " + str(current_time))
+
             reward = CRASHED_TARGET_REWARD
             terminated = True
             info = {"state": "crashed_into_target"}
             self.update_findings_list(info["state"])
             
         else: # Target Reached
-            # self.log_message("*********************Target Reached*********************")
+            self.log_message("*********************Target Reached*********************")
+            current_time = datetime.datetime.now()
+            self.log_message(str(self.steps) +  "taken in total at timestamp: " + str(current_time))
+
             # self.log_message(str(self.configuration[2:4]))
             reward = REACHED_TARGET_REWARD
             terminated = True
@@ -543,7 +547,10 @@ class FixedBaseRobotEnv(gym.Env):
             
         # Episodes are truncated after 10s = 1000 timesteps = 200 decisions
         if self.steps >= MAX_STEPS_PER_EPISODE:
-            # self.log_message("Maximum Episode length reached.")
+            self.log_message("Maximum Episode length reached.")
+            current_time = datetime.datetime.now()
+            self.log_message(str(self.steps) +  "taken in total at timestamp: " + str(current_time))
+
             truncated = True
             info = {"state": "max_length_reached"}
             self.update_findings_list(info["state"])
@@ -560,12 +567,3 @@ class FixedBaseRobotEnv(gym.Env):
         return observation, reward, terminated, truncated, info
 
     
-
-
-
-    
-
-
-        
-        
-
