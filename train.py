@@ -51,7 +51,7 @@ for i in range(TRAINING_STEPS_IN_MIO):
     env.log_message('\n')
 
     # Save the model every 5 Mio Steps and write the performance to the log file
-    if (i + TRAINING_STEPS_OFFSET) % 5 == 0:
+    if (i + TRAINING_STEPS_OFFSET + 1) % 5 == 0:
         model_filename = "ppo_fixed_base_robot_" + str(i + TRAINING_STEPS_OFFSET + 1) + "M"
         model.save(os.path.join(model_dir, model_filename))
 
