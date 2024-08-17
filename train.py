@@ -41,7 +41,10 @@ try:
 
         # Train the model for 1Mio steps with the callback
         model.learn(total_timesteps=1000000, callback=eval_callback, reset_num_timesteps=False, tb_log_name="tb_logs")
-        
+
+        # Make an entry to the log
+        current_time = datetime.datetime.now()
+        env.log_message(str(i +TRAINING_STEPS_OFFSET) + "M steps trained in total at " + str(current_time))
 
         # Save the model every 5 Mio Steps and write the performance to the log file
         if (i + TRAINING_STEPS_OFFSET) % 5 == 0:
