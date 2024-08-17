@@ -516,9 +516,6 @@ class FixedBaseRobotEnv(gym.Env):
 
         elif stepResult ==  "crashedIntoGround": # Crash into ground
             # self.log_message("crashedIntoGround")
-            # current_time = datetime.datetime.now()
-            # self.log_message(str(self.steps) +  "taken in total at timestamp: " + str(current_time))
-
             reward = CRASHED_GROUND_REWARD
             terminated = True
             info = {"state": "crashed_into_ground"}
@@ -526,9 +523,6 @@ class FixedBaseRobotEnv(gym.Env):
         
         elif stepResult == "targetCrashed":  # Goal reached
             # self.log_message("targetCrashed")
-            # current_time = datetime.datetime.now()
-            # self.log_message(str(self.steps) +  "taken in total at timestamp: " + str(current_time))
-
             reward = CRASHED_TARGET_REWARD
             terminated = True
             info = {"state": "crashed_into_target"}
@@ -536,9 +530,6 @@ class FixedBaseRobotEnv(gym.Env):
             
         else: # Target Reached
             # self.log_message("*********************Target Reached*********************")
-            # current_time = datetime.datetime.now()
-            # self.log_message(str(self.steps) +  "taken in total at timestamp: " + str(current_time))
-
             # self.log_message(str(self.configuration[2:4]))
             reward = REACHED_TARGET_REWARD
             terminated = True
@@ -548,9 +539,6 @@ class FixedBaseRobotEnv(gym.Env):
         # Episodes are truncated after 10s = 1000 timesteps = 200 decisions
         if self.steps >= MAX_STEPS_PER_EPISODE:
             # self.log_message("Maximum Episode length reached.")
-            # current_time = datetime.datetime.now()
-            # self.log_message(str(self.steps) +  "taken in total at timestamp: " + str(current_time))
-
             truncated = True
             info = {"state": "max_length_reached"}
             self.update_findings_list(info["state"])

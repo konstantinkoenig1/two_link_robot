@@ -44,20 +44,16 @@ try:
 
         # Make an entry to the log
         current_time = datetime.datetime.now()
-        env.log_message(str(i +TRAINING_STEPS_OFFSET) + "M steps trained in total at " + str(current_time))
+        env.log_message('\n')
+        env.log_message("***** Evaluation after " + str(i +TRAINING_STEPS_OFFSET + 1) + "M steps *****")
+        env.log_message("timestamp: " + str(current_time))
+        env.log_findings_eval_dict()
+        env.log_message('\n')
 
         # Save the model every 5 Mio Steps and write the performance to the log file
         if (i + TRAINING_STEPS_OFFSET) % 5 == 0:
-            model_filename = "ppo_fixed_base_robot_" + str(i + TRAINING_STEPS_OFFSET) + "M"
+            model_filename = "ppo_fixed_base_robot_" + str(i + TRAINING_STEPS_OFFSET + 1) + "M"
             model.save(os.path.join(model_dir, model_filename))
-
-            current_time = datetime.datetime.now()
-            env.log_message("***** Evaluation after " + str(i +TRAINING_STEPS_OFFSET) + "M steps *****")
-            env.log_message("timestamp: " + str(current_time))
-            env.log_findings_eval_dict()
-            env.log_message('\n')
-
-
 
     # Evaluate the model
     mean_reward, std_reward = evaluate_policy(model, env, n_eval_episodes=50)
