@@ -25,7 +25,7 @@ class FixedBaseRobotEnv(gym.Env):
 
     metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 100} 
 
-    def __init__(self, render_mode=None):
+    def __init__(self, render_mode=None, findings_log_path="findings.txt"):
         # Define action and observation space
         # They must be gymnasium.spaces objects
     
@@ -128,6 +128,9 @@ class FixedBaseRobotEnv(gym.Env):
                                                         OMEGA_DOT_MAX,]),  # 15
                                                         dtype=np.float32)
         
+        # Store the log path as an attribute of the instance
+        self.findings_log_path = findings_log_path
+        
         print("Environment initialized.")
         print("action_space:")
         print(self.action_space)
@@ -153,15 +156,15 @@ class FixedBaseRobotEnv(gym.Env):
     
     def create_findings_log_file(self):
         # Ensure the directory exists
-        os.makedirs(os.path.dirname(FINDINGS_LOG_PATH), exist_ok=True)
+        os.makedirs(os.path.dirname(self.findings_log_path), exist_ok=True)
         # Create the file (or clear it if it already exists)
-        with open(FINDINGS_LOG_PATH, 'w') as file:
+        with open(self.findings_log_path, 'w') as file:
             current_time = datetime.datetime.now()
             file.write('Log File Created on ' + str(current_time) + '\n')
 
     def log_message(self, message):
             # Write a message to the file
-            with open(FINDINGS_LOG_PATH, 'a') as file:
+            with open(self.findings_log_path, 'a') as file:
                 file.write(message + '\n')
     
     def log_findings_eval_dict(self):

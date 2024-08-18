@@ -1,32 +1,36 @@
 import gymnasium as gym
-from stable_baselines3 import PPO
+from stable_baselines3 import SAC
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.callbacks import EvalCallback
 import os
 import sys
 import datetime
 import traceback
+import torch as th
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 from envs.fixed_base_robot_env import FixedBaseRobotEnv
 
 
 # Define the TensorBoard log directory
-model_dir = "./models_and_logs/PPO_1"
+model_dir = "./models_and_logs/SAC_larger_first_layer"
 os.makedirs(model_dir, exist_ok=True)
 
 # Create environment without rendering
-env = FixedBaseRobotEnv() # not render_mode = "human" 
+env = FixedBaseRobotEnv(findings_log_path="models_and_logs/SAC_larger_first_layer/findings.txt") # not render_mode = "human" 
 
-
+# Configure custom network architecture
+policy_kwargs = dict(activation_fn=th.nn.ReLU,
+                     net_arch=dict(pi=[512, 256], qf=[512, 256]))
 
 # Create the model
-model = PPO('MlpPolicy', env, verbose=1, tensorboard_log=model_dir)
-# model = PPO.load(os.path.join(model_dir, "ppo_fixed_base_robot"), env=env, tensorboard_log=model_dir)
+model = SAC('MlpPolicy', env, policy_kwargs=policy_kwargs, verbose=1, tensorboard_log=model_dir)
+# model = SAC.load(os.path.join(model_dir, "ppo_fixed_base_robot"), env=env, tensorboard_log=model_dir)
 
 # Set seed for reproducable results
 model.set_random_seed(seed=1)
 
+print(model.policy)
 
 # Define an evaluation callback
 eval_callback = EvalCallback(env, best_model_save_path=model_dir,
@@ -34,7 +38,7 @@ eval_callback = EvalCallback(env, best_model_save_path=model_dir,
                             deterministic=True, render=False)
 
 # Set training steps here
-TRAINING_STEPS_IN_MIO = 50
+TRAINING_STEPS_IN_MIO = 200
 
 # Number of Previous trainings steps for correct na:
 TRAINING_STEPS_OFFSET = 0

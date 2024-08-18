@@ -7,16 +7,16 @@ import sys
 import datetime
 import traceback
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 from envs.fixed_base_robot_env import FixedBaseRobotEnv
 
 
 # Define the TensorBoard log directory
-model_dir = "./models_and_logs/PPO_1"
+model_dir = "./models_and_logs/PPO_default"
 os.makedirs(model_dir, exist_ok=True)
 
 # Create environment without rendering
-env = FixedBaseRobotEnv() # not render_mode = "human" 
+env = FixedBaseRobotEnv(findings_log_path="models_and_logs/PPO_default/findings.txt") # not render_mode = "human" 
 
 
 
@@ -27,6 +27,7 @@ model = PPO('MlpPolicy', env, verbose=1, tensorboard_log=model_dir)
 # Set seed for reproducable results
 model.set_random_seed(seed=1)
 
+print(model.policy)
 
 # Define an evaluation callback
 eval_callback = EvalCallback(env, best_model_save_path=model_dir,
@@ -34,7 +35,7 @@ eval_callback = EvalCallback(env, best_model_save_path=model_dir,
                             deterministic=True, render=False)
 
 # Set training steps here
-TRAINING_STEPS_IN_MIO = 50
+TRAINING_STEPS_IN_MIO = 200
 
 # Number of Previous trainings steps for correct na:
 TRAINING_STEPS_OFFSET = 0

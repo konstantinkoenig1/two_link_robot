@@ -53,6 +53,3 @@ TOL_VEL = 0.25 #0.02                          # Max tolerated velocity near targ
 l_i = LINK_LENGTH
 m_i = LINK_MASS
 
-
-# For logging
-FINDINGS_LOG_PATH = "models_and_logs/PPO_1/findings.txt"
