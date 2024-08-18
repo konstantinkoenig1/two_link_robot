@@ -12,11 +12,11 @@ from envs.fixed_base_robot_env import FixedBaseRobotEnv
 
 
 # Define the TensorBoard log directory
-model_dir = "./models_and_logs/PPO_1"
+model_dir = "./models_and_logs/legacy"
 os.makedirs(model_dir, exist_ok=True)
 
 # Create environment without rendering
-env = FixedBaseRobotEnv() # not render_mode = "human" 
+env = FixedBaseRobotEnv(findings_log_path="models_and_logs/legacy/findings.txt") # not render_mode = "human" 
 
 
 

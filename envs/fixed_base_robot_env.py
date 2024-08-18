@@ -168,6 +168,8 @@ class FixedBaseRobotEnv(gym.Env):
                 file.write(message + '\n')
     
     def log_findings_eval_dict(self):
+        self.eval_findings_variable()
+        self.log_message("Evaluation of last 5000 episodes:")
     # Iterate over the dictionary and log each key-value pair
         for key, value in self.findings_evaluation_dict.items():
             message = f"{key}: {value}"
@@ -201,7 +203,6 @@ class FixedBaseRobotEnv(gym.Env):
 
 
     def reset(self, seed=None):
-        # self.log_message("New episode started.")
         # Reset the position of the manipulator. Set theta dot and theta ddot to zero.
         self.steps = 0
         self.timesteps = 0
