@@ -34,7 +34,7 @@ eval_callback = EvalCallback(env, best_model_save_path=model_dir,
                             deterministic=True, render=False)
 
 # Set training steps here
-TRAINING_STEPS_IN_MIO = 50
+TRAINING_STEPS_IN_MIO = 200
 
 # Number of Previous trainings steps for correct na:
 TRAINING_STEPS_OFFSET = 0
