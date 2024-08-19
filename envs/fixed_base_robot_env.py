@@ -6,8 +6,6 @@ import sys
 import os
 import datetime
 
-from scipy.stats import entropy
-
 from rendering.rendering import Renderer
 
 # Add  parent directory to the system path
@@ -25,7 +23,7 @@ class FixedBaseRobotEnv(gym.Env):
 
     metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 100} 
 
-    def __init__(self, render_mode=None, findings_log_path="findings.txt"):
+    def __init__(self, render_mode=None, findings_log_path="findings.txt", logging = False):
         # Define action and observation space
         # They must be gymnasium.spaces objects
     
@@ -130,18 +128,11 @@ class FixedBaseRobotEnv(gym.Env):
         
         # Store the log path as an attribute of the instance
         self.findings_log_path = findings_log_path
-        
-        print("Environment initialized.")
-        print("action_space:")
-        print(self.action_space)
-        print("observation_space:")
-        print(self.observation_space)
-        print("self.action_space.sample():")
-        print(self.action_space.sample())
 
-        self.create_findings_log_file()
 
         # For logging
+        self.logging = logging
+        self.create_findings_log_file()
         self.findings_log_list, self.findings_evaluation_dict = self.create_findings_list()
         self.episodes_since_instantiation = 0
 
@@ -155,25 +146,28 @@ class FixedBaseRobotEnv(gym.Env):
 
     
     def create_findings_log_file(self):
-        # Ensure the directory exists
-        os.makedirs(os.path.dirname(self.findings_log_path), exist_ok=True)
-        # Create the file (or clear it if it already exists)
-        with open(self.findings_log_path, 'w') as file:
-            current_time = datetime.datetime.now()
-            file.write('Log File Created on ' + str(current_time) + '\n')
+        if self.logging:
+            # Ensure the directory exists
+            os.makedirs(os.path.dirname(self.findings_log_path), exist_ok=True)
+            # Create the file (or clear it if it already exists)
+            with open(self.findings_log_path, 'w') as file:
+                current_time = datetime.datetime.now()
+                file.write('Log File Created on ' + str(current_time) + '\n')
 
     def log_message(self, message):
-            # Write a message to the file
-            with open(self.findings_log_path, 'a') as file:
-                file.write(message + '\n')
+            if self.logging:
+                # Write a message to the file
+                with open(self.findings_log_path, 'a') as file:
+                    file.write(message + '\n')
     
     def log_findings_eval_dict(self):
-        self.eval_findings_variable()
-        self.log_message("Evaluation of last 5000 episodes:")
-    # Iterate over the dictionary and log each key-value pair
-        for key, value in self.findings_evaluation_dict.items():
-            message = f"{key}: {value}"
-            self.log_message(message)
+        if self.logging:
+            self.eval_findings_variable()
+            self.log_message("Evaluation of last 5000 episodes:")
+        # Iterate over the dictionary and log each key-value pair
+            for key, value in self.findings_evaluation_dict.items():
+                message = f"{key}: {value}"
+                self.log_message(message)
 
 
     def create_findings_list(self):
@@ -432,7 +426,7 @@ class FixedBaseRobotEnv(gym.Env):
         # Evaluate if Robot Crashed into ground (if both have positive y-component return false)
         if joint_1_y < 0 or p_ee[1][0] < 0:
             if self.render_mode == "human":
-                ("Robot crashed into ground")
+                print("Robot crashed into ground")
                 
             return "crashedIntoGround"
         
@@ -457,31 +451,9 @@ class FixedBaseRobotEnv(gym.Env):
     
     def step(self, action):
 
-        # print("action before scaling:")
-        # print(action)
-
         # Reshape action
         action = action.reshape((2, 1))
         action = action * MAX_TORQUE
-        # print("******************")
-        # print("action:")
-        # print(action)
-        # self.action_log = np.append(self.action_log, action, axis=1)
-        
-        # print("****************************************************")
-        # print("number of actions taken:")
-        # print(self.action_log.shape[1])
-        # print("entropy of actions:")
-        # print(entropy(self.action_log, axis=1))
-
-        # print("max of actions:")
-        # print(np.max(self.action_log, axis=1))
-        
-        # print("min of actions:")
-        # print(np.min(self.action_log, axis=1))
-
-        # print("average of actions:")
-        # print(np.mean(self.action_log, axis=1))
         
         # Take the action
         self.configuration[0:2] = copy.deepcopy(action) # Set torque to joints 1 and 2 
@@ -519,22 +491,18 @@ class FixedBaseRobotEnv(gym.Env):
             info = {"state": "ongoing"}
 
         elif stepResult ==  "crashedIntoGround": # Crash into ground
-            # self.log_message("crashedIntoGround")
             reward = CRASHED_GROUND_REWARD
             terminated = True
             info = {"state": "crashed_into_ground"}
             self.update_findings_list(info["state"])
         
         elif stepResult == "targetCrashed":  # Goal reached
-            # self.log_message("targetCrashed")
             reward = CRASHED_TARGET_REWARD
             terminated = True
             info = {"state": "crashed_into_target"}
             self.update_findings_list(info["state"])
             
         else: # Target Reached
-            # self.log_message("*********************Target Reached*********************")
-            # self.log_message(str(self.configuration[2:4]))
             reward = REACHED_TARGET_REWARD
             terminated = True
             info = {"state": "target_reached"}
@@ -542,7 +510,6 @@ class FixedBaseRobotEnv(gym.Env):
             
         # Episodes are truncated after 10s = 1000 timesteps = 200 decisions
         if self.steps >= MAX_STEPS_PER_EPISODE:
-            # self.log_message("Maximum Episode length reached.")
             truncated = True
             info = {"state": "max_length_reached"}
             self.update_findings_list(info["state"])

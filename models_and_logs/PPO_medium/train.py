@@ -21,17 +21,17 @@ env = FixedBaseRobotEnv(findings_log_path=model_dir+"/findings.txt", logging=Tru
 train_algorithm = "PPO"   ### change here
 
 # Model Architecture
-model_architecture = [256, 256, 256]    ### change here
+model_architecture = [128, 64]    ### change here
 
 # activation function
-activation_function = th.nn.ReLU    ### change heres
+activation_function = th.nn.Tanh     ### change heres
 
 # Configure custom network architecture
 policy_kwargs = dict(activation_fn=activation_function,
                      net_arch=dict(pi=model_architecture, vf=model_architecture))
 
 # Create the model
-model = PPO('MlpPolicy', env, policy_kwargs=policy_kwargs, verbose=1, tensorboard_log=model_dir)   ### change heres
+model = PPO('MlpPolicy', env, policy_kwargs=policy_kwargs, verbose=1, tensorboard_log=model_dir)    ### change heres
 # model = PPO.load(os.path.join(model_dir, "ppo_fixed_base_robot"), env=env, tensorboard_log=model_dir)
 
 # Set seed for reproducable results

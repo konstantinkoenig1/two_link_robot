@@ -1,32 +1,36 @@
 import gymnasium as gym
-from stable_baselines3 import PPO
+from stable_baselines3 import SAC
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.callbacks import EvalCallback
 import os
 import sys
 import datetime
 import traceback
+import torch as th
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 from envs.fixed_base_robot_env import FixedBaseRobotEnv
 
 
 # Define the TensorBoard log directory
-model_dir = "./models_and_logs/legacy"
+model_dir = "./models_and_logs/SAC_extra_layer"
 os.makedirs(model_dir, exist_ok=True)
 
 # Create environment without rendering
-env = FixedBaseRobotEnv(findings_log_path="models_and_logs/legacy/findings.txt") # not render_mode = "human" 
+env = FixedBaseRobotEnv(findings_log_path="models_and_logs/SAC_extra_layer/findings.txt") # not render_mode = "human" 
 
-
+# Configure custom network architecture
+policy_kwargs = dict(activation_fn=th.nn.ReLU,
+                     net_arch=dict(pi=[256, 256, 256], qf=[256, 256, 256]))
 
 # Create the model
-model = PPO('MlpPolicy', env, verbose=1, tensorboard_log=model_dir)
-# model = PPO.load(os.path.join(model_dir, "ppo_fixed_base_robot"), env=env, tensorboard_log=model_dir)
+model = SAC('MlpPolicy', env, policy_kwargs=policy_kwargs, verbose=1, tensorboard_log=model_dir)
+# model = SAC.load(os.path.join(model_dir, "ppo_fixed_base_robot"), env=env, tensorboard_log=model_dir)
 
 # Set seed for reproducable results
 model.set_random_seed(seed=1)
 
+print(model.policy)
 
 # Define an evaluation callback
 eval_callback = EvalCallback(env, best_model_save_path=model_dir,
