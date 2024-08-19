@@ -1,0 +1,12 @@
+Log File Created on 2024-08-18 02:45:48.145666
+
+
+***** Evaluation after 1M steps *****
+timestamp: 2024-08-19 02:18:43.442396
+Evaluation of last 5000 episodes:
+crashed_into_ground: 0.0
+crashed_into_target: 0.0166
+target_reached: 0.9826
+max_length_reached: 0.0008
+
+
