@@ -28,7 +28,7 @@ activation_function = th.nn.ReLU     ### change heres
 
 # Configure custom network architecture
 policy_kwargs = dict(activation_fn=activation_function,
-                     net_arch=dict(pi=model_architecture, vf=model_architecture))
+                     net_arch=dict(pi=model_architecture, qf=model_architecture))
 
 # Create the model
 model = TD3('MlpPolicy', env, policy_kwargs=policy_kwargs, verbose=1, tensorboard_log=model_dir)  ### change heres
