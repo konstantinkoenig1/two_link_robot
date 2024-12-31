@@ -441,7 +441,7 @@ class FixedBaseRobotEnv(gym.Env):
                 return "targetReached" # Reached target without crash 
             else:
                 if self.render_mode == "human":
-                    print("Robot end-effector speed to high when reaching target")
+                    print("Robot end-effector speed too high when reaching target")
                     
                 return "targetCrashed" # Crashed into target
         else:
