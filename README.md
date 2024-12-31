@@ -1,25 +1,25 @@
 # README
 
-## Purpose of this project
-This python code is optimized for readability and not for training speed. The code should remain easy to comprehend. No importance is put on training speed.
+## What is this?
 
+This project implements a two-link robot controlled by a NN trained with a deep reinforcement learning algorithm.
 
-## Naming conventions
+## How to run?
 
-Constants in SCREAMING_SNAKE_CASE
-Functions in camelCase and descriptive
-file names in snake_case
-folders in snake_case
-variables in snake_case
+### Step 1: Recreate conda environment
 
+Navigate to root of directory "two_link_robot" and execute this command:
 
-## Training Algorithms in stable_baselines3 (continuous action- and observation space marked with *)
-A2C *
-DDPG *
-DQN (x)
-HER (*)
-PPO *
-SAC *
-TD3 *
+conda env create -f environment.yml
 
-I just edited this in the browser
+### Step 2: Activate conda environment
+
+conda activate myenv_two_link_robot
+
+### Step 3: Run
+
+python3 perform.py
+
+## Author
+Konstantin König, Dec 31st 2024
+konstantin.koenig@aol.com

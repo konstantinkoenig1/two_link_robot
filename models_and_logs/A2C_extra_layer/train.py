@@ -24,14 +24,14 @@ train_algorithm = "A2C"   ### change here
 model_architecture = [256, 256, 256]    ### change here
 
 # activation function
-activation_function = th.nn.ReLU     ### change heres
+activation_function = th.nn.ReLU     ### change here
 
 # Configure custom network architecture
 policy_kwargs = dict(activation_fn=activation_function,
                      net_arch=dict(pi=model_architecture, vf=model_architecture))
 
 # Create the model
-model = A2C('MlpPolicy', env, policy_kwargs=policy_kwargs, verbose=1, tensorboard_log=model_dir)   ### change heres
+model = A2C('MlpPolicy', env, policy_kwargs=policy_kwargs, verbose=1, tensorboard_log=model_dir)   ### change here
 # model = PPO.load(os.path.join(model_dir, "ppo_fixed_base_robot"), env=env, tensorboard_log=model_dir)
 
 # Set seed for reproducable results

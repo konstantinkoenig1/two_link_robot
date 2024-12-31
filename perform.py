@@ -17,7 +17,7 @@ env = FixedBaseRobotEnv(render_mode="human", findings_log_path="./models_and_log
 # Create the model
 # model = DQN('MlpPolicy', env, verbose=1, tensorboard_log=log_dir)
 # model = PPO.load(os.path.join(log_dir, "ppo_fixed_base_robot"), env=env, tensorboard_log=log_dir)
-model = SAC.load("/home/konstantinkoenig/Desktop/Arbeitsplatz Ubuntu/Code/reinforcement_learning_projects/two_link_robot/models_and_logs/legacy/SAC_extra_layer_legacy/models_and_logs/SAC_extra_layer/best_model.zip", env=env, tensorboard_log=log_dir)
+model = SAC.load("/home/konstantinkoenig/Desktop/Arbeitsplatz Ubuntu/Code/reinforcement_learning_projects/two_link_robot/models_and_logs/SAC_extra_layer/SAC_extra_layer.zip", env=env, tensorboard_log=log_dir)
 # model = PPO.load(os.path.join(log_dir, "best_model"), env=env, tensorboard_log=log_dir)
 
 print(model.policy)
