@@ -15,7 +15,7 @@ conda env create -f environment.yml
 
 ### Step 2: Activate conda environment
 
-conda activate myenv_two_link_robot
+conda activate myenv_rl
 
 ### Step 3: Run
 To demonstrate the best saved model, run: 

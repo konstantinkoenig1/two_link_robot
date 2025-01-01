@@ -1,4 +1,4 @@
-name: myenv_two_link_robot
+name: myenv_rl
 channels:
   - conda-forge
   - defaults
