@@ -1,6 +1,6 @@
 # README
 
-## What is this?
+## Project Description
 
 This project implements a two-link robot controlled by a NN trained with a deep reinforcement learning algorithm. 
 
